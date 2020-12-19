@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use JWTAuth;
-use App\Task;
+use App\Product;
 use Illuminate\Http\Request;
 
-class TaskController extends Controller
+class ProductController extends Controller
 {
     protected $user;
 
@@ -22,9 +22,9 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = $this->user->tasks()->get(["id", "title", "details", "created_by"])->toArray();
+        $products = Product::get()->toArray();
 
-        return $tasks;
+        return $products;
     }
 
     /**
@@ -47,22 +47,25 @@ class TaskController extends Controller
     {
         $this->validate($request, [
             "title" => "required",
-            "details" => "required"
+            "description" => "required",
+            "price" => "required"
         ]);
 
-        $task = new Task();
-        $task->title = $request->title;
-        $task->details = $request->details;
+        $product = new Product();
+        $product->title = $request->title;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->image = $request->image;
 
-        if ($this->user->tasks()->save($task)) {
+        if ($product->save()) {
             return response()->json([
                 "status" => true,
-                "task" => $task
+                "product" => $product
             ]);
         } else {
             return response()->json([
                 "status" => false,
-                "message" => "Ops, task could not be saved."
+                "message" => "Ops, product could not be saved."
             ], 500);
         }
     }
@@ -70,10 +73,10 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Task $task
+     * @param  \App\Product $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Task $task)
+    public function show(Product $product)
     {
         //
     }
@@ -81,10 +84,10 @@ class TaskController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Task $task
+     * @param  \App\Product $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(Task $task)
+    public function edit(Product $product)
     {
         //
     }
@@ -93,28 +96,31 @@ class TaskController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \App\Task $task
+     * @param  \App\Product $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Task $task)
+    public function update(Request $request, Product $product)
     {
         $this->validate($request, [
             "title" => "required",
-            "details" => "required"
+            "description" => "required",
+            "price" => "required"
         ]);
 
-        $task->title = $request->title;
-        $task->details = $request->details;
+        $product->title = $request->title;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->image = $request->image;
 
-        if ($this->user->tasks()->save($task)) {
+        if ($product->save()) {
             return response()->json([
                 "status" => true,
-                "task" => $task
+                "product" => $product
             ]);
         } else {
             return response()->json([
                 "status" => false,
-                "message" => "Ops, task could not be updated."
+                "message" => "Ops, product could not be updated."
             ], 500);
         }
     }
@@ -122,20 +128,20 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Task $task
+     * @param  \App\Product $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Task $task)
+    public function destroy(Product $product)
     {
-        if ($task->delete()) {
+        if ($product->delete()) {
             return response()->json([
                 "status" => true,
-                "task" => $task
+                "product" => $product
             ]);
         } else {
             return response()->json([
                 "status" => false,
-                "message" => "Ops, task could not be deleted."
+                "message" => "Ops, product could not be deleted."
             ]);
         }
     }

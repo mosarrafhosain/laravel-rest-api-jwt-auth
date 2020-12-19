@@ -23,5 +23,5 @@ Route::post("register", "AuthController@register");
 
 Route::group(["middleware" => "auth.jwt"], function () {
     Route::get("logout", "AuthController@logout");
-    Route::resource("tasks", "TaskController");
+    Route::resource("products", "ProductController");
 });
